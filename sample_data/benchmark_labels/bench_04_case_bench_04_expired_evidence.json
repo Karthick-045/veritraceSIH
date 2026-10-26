@@ -1,0 +1,20 @@
+{
+  "case_key": "CASE_BENCH_04_EXPIRED_EVIDENCE",
+  "description": "Valid until date is before scrutiny review date (True Positive)",
+  "expected_rules": [
+    "EVIDENCE_EXPIRED"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Pollution Consent.pdf",
+      "key": "valid_until",
+      "raw": "31/12/2024",
+      "normalized": "2024-12-31",
+      "confidence": 0.96
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "case_key": "CASE_BENCH_11_COMPLIANT_BUNDLE_NEGATIVE",
+  "description": "Completely compliant application with consistent dates and matching entities - Must NOT fire (Negative Example)",
+  "expected_rules": [],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Approval.pdf",
+      "key": "institution_name",
+      "raw": "Vellore College of Engineering",
+      "normalized": "vellore college of engineering",
+      "confidence": 0.99
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Land.pdf",
+      "key": "institution_name",
+      "raw": "Vellore College of Engineering",
+      "normalized": "vellore college of engineering",
+      "confidence": 0.98
+    },
+    {
+      "doc_id": 1,
+      "doc_name": "Approval.pdf",
+      "key": "academic_year",
+      "raw": "2025-2026",
+      "normalized": "2025-2026",
+      "confidence": 0.99
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Land.pdf",
+      "key": "academic_year",
+      "raw": "2025-2026",
+      "normalized": "2025-2026",
+      "confidence": 0.98
+    },
+    {
+      "doc_id": 1,
+      "doc_name": "Approval.pdf",
+      "key": "issue_date",
+      "raw": "10/01/2025",
+      "normalized": "2025-01-10",
+      "confidence": 0.98
+    },
+    {
+      "doc_id": 1,
+      "doc_name": "Approval.pdf",
+      "key": "valid_until",
+      "raw": "10/01/2027",
+      "normalized": "2027-01-10",
+      "confidence": 0.98
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "case_key": "CASE_BENCH_10_MULTIPLE_INCONSISTENCIES_COMPOUND",
+  "description": "Compound case with both expired evidence and institution name mismatch",
+  "expected_rules": [
+    "CROSS_DOC_VALUE_MISMATCH",
+    "EVIDENCE_EXPIRED"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Doc A.pdf",
+      "key": "institution_name",
+      "raw": "Global Academy of Sciences",
+      "normalized": "global academy of sciences",
+      "confidence": 0.95
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Doc B.pdf",
+      "key": "institution_name",
+      "raw": "Sunshine Valley Institute",
+      "normalized": "sunshine valley institute",
+      "confidence": 0.94
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Doc B.pdf",
+      "key": "valid_until",
+      "raw": "15/01/2025",
+      "normalized": "2025-01-15",
+      "confidence": 0.95
+    }
+  ]
+}

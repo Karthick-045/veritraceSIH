@@ -1,0 +1,28 @@
+{
+  "case_key": "CASE_BENCH_12_LAND_AREA_DISCREPANCY",
+  "description": "Declared land area differs between AICTE Application and Revenue Record (True Positive)",
+  "expected_rules": [
+    "CROSS_DOC_VALUE_MISMATCH"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "AICTE Application.pdf",
+      "key": "land_area",
+      "raw": "10.0 Acres",
+      "normalized": "10.00 acres",
+      "confidence": 0.96
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Revenue Survey.pdf",
+      "key": "land_area",
+      "raw": "5.5 Acres",
+      "normalized": "5.50 acres",
+      "confidence": 0.95
+    }
+  ]
+}

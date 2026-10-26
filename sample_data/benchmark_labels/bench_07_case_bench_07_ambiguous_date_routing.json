@@ -1,0 +1,21 @@
+{
+  "case_key": "CASE_BENCH_07_AMBIGUOUS_DATE_ROUTING",
+  "description": "Date format 03/04/2025 is ambiguous without locale - routes to review, does not accuse (True Positive)",
+  "expected_rules": [
+    "LOW_CONFIDENCE_EXTRACTION"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Inspection Report.pdf",
+      "key": "issue_date",
+      "raw": "03/04/2025",
+      "normalized": null,
+      "confidence": 0.9,
+      "is_ambiguous": true
+    }
+  ]
+}

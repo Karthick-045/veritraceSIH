@@ -1,0 +1,26 @@
+{
+  "case_key": "CASE_BENCH_02_NAME_ABBREVIATION_NEGATIVE",
+  "description": "Institution name with common abbreviation ('Inst.' vs 'Institute') - Must NOT fire (Negative Example)",
+  "expected_rules": [],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "AICTE Letter.pdf",
+      "key": "institution_name",
+      "raw": "Delhi Institute of Technology",
+      "normalized": "delhi institute of technology",
+      "confidence": 0.98
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Society Reg.pdf",
+      "key": "institution_name",
+      "raw": "Delhi Inst. of Tech",
+      "normalized": "delhi institute of technology",
+      "confidence": 0.96
+    }
+  ]
+}

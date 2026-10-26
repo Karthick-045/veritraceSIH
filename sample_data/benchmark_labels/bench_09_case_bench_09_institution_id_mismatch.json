@@ -1,0 +1,28 @@
+{
+  "case_key": "CASE_BENCH_09_INSTITUTION_ID_MISMATCH",
+  "description": "Permanent AICTE ID differs across documents (True Positive)",
+  "expected_rules": [
+    "CROSS_DOC_VALUE_MISMATCH"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "AICTE Approval.pdf",
+      "key": "institution_id",
+      "raw": "1-98746210",
+      "normalized": "1-98746210",
+      "confidence": 0.99
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Building Plan.pdf",
+      "key": "institution_id",
+      "raw": "1-55443322",
+      "normalized": "1-55443322",
+      "confidence": 0.95
+    }
+  ]
+}

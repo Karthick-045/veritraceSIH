@@ -1,0 +1,28 @@
+{
+  "case_key": "CASE_BENCH_03_DATE_ORDER_INVERTED",
+  "description": "Expiry date occurs before Issue date within same document (True Positive)",
+  "expected_rules": [
+    "DATE_ORDER_INVALID"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Fire Clearance.pdf",
+      "key": "issue_date",
+      "raw": "15/06/2024",
+      "normalized": "2024-06-15",
+      "confidence": 0.97
+    },
+    {
+      "doc_id": 1,
+      "doc_name": "Fire Clearance.pdf",
+      "key": "valid_until",
+      "raw": "10/01/2024",
+      "normalized": "2024-01-10",
+      "confidence": 0.95
+    }
+  ]
+}

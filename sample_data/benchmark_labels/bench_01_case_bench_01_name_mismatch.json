@@ -1,0 +1,28 @@
+{
+  "case_key": "CASE_BENCH_01_NAME_MISMATCH",
+  "description": "Cross-document Institution Name Discrepancy (True Positive)",
+  "expected_rules": [
+    "CROSS_DOC_VALUE_MISMATCH"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "AICTE Approval.pdf",
+      "key": "institution_name",
+      "raw": "National Institute of Science and Technology",
+      "normalized": "national institute of science and technology",
+      "confidence": 0.98
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Land Document.pdf",
+      "key": "institution_name",
+      "raw": "Metropolitan College of Engineering",
+      "normalized": "metropolitan college of engineering",
+      "confidence": 0.95
+    }
+  ]
+}

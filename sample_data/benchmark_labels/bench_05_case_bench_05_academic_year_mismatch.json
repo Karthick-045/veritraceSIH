@@ -1,0 +1,28 @@
+{
+  "case_key": "CASE_BENCH_05_ACADEMIC_YEAR_MISMATCH",
+  "description": "Different academic sessions cited in application bundle (True Positive)",
+  "expected_rules": [
+    "ACADEMIC_YEAR_MISMATCH"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "AICTE Approval.pdf",
+      "key": "academic_year",
+      "raw": "2025-2026",
+      "normalized": "2025-2026",
+      "confidence": 0.99
+    },
+    {
+      "doc_id": 2,
+      "doc_name": "Affiliation Notice.pdf",
+      "key": "academic_year",
+      "raw": "2024-2025",
+      "normalized": "2024-2025",
+      "confidence": 0.97
+    }
+  ]
+}

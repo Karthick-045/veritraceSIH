@@ -1,0 +1,20 @@
+{
+  "case_key": "CASE_BENCH_08_LOW_CONFIDENCE_OCR_ROUTING",
+  "description": "Blurred scan yields OCR confidence 0.48 (< 0.65 threshold) - routed to review (True Positive)",
+  "expected_rules": [
+    "LOW_CONFIDENCE_EXTRACTION"
+  ],
+  "case_context": {
+    "review_date": "2025-06-01"
+  },
+  "claims": [
+    {
+      "doc_id": 1,
+      "doc_name": "Scanned Document.pdf",
+      "key": "institution_name",
+      "raw": "Apex Institute",
+      "normalized": "apex institute",
+      "confidence": 0.48
+    }
+  ]
+}
