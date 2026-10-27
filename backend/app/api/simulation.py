@@ -22,7 +22,31 @@ router = APIRouter(tags=["What-if Simulation"])
 
 
 def _finding_signature(finding: SimulationFindingOut) -> str:
-    return json.dumps(finding.model_dump(mode="json"), sort_keys=True)
+    evidence_identity = [
+        {
+            "document_id": evidence.get("document_id"),
+            "field_id": evidence.get("field_id"),
+            "field_key": evidence.get("field_key"),
+            "source_label": evidence.get("source_label"),
+        }
+        for evidence in finding.evidence
+    ]
+    return json.dumps(
+        {
+            "rule_code": finding.rule_code,
+            "title": finding.title,
+            "severity": finding.severity,
+            "evidence": sorted(
+                evidence_identity,
+                key=lambda item: (
+                    item["document_id"] or 0,
+                    item["field_id"] or 0,
+                    item["source_label"] or "",
+                ),
+            ),
+        },
+        sort_keys=True,
+    )
 
 
 def _summarize(

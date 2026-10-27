@@ -68,6 +68,15 @@ def test_simulation_compares_review_date_and_does_not_persist(client, db_session
     assert unchanged_result["added_findings"] == []
     assert unchanged_result["resolved_findings"] == []
 
+    still_expired_response = client.post(
+        f"/api/cases/{case.id}/simulate",
+        json={"review_date": "2025-06-01"},
+    )
+    still_expired_result = still_expired_response.json()["data"]
+    assert still_expired_result["scenario"]["finding_count"] == 1
+    assert still_expired_result["added_findings"] == []
+    assert still_expired_result["resolved_findings"] == []
+
     response = client.post(
         f"/api/cases/{case.id}/simulate",
         json={"review_date": "2024-06-01"},
