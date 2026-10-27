@@ -39,6 +39,7 @@
 4. **Reviewer Correction with Provenance**: Fix OCR typos while immutably storing the original raw value and audit reason.
 5. **Neutral Clarification Letter Draft**: Generates polite, non-accusatory clarification letters ready to copy for applicant inquiries.
 6. **Reproducibility Proof**: Re-evaluates identical input hashes to confirm deterministic consistency.
+7. **What-if Scenario Simulator**: Compare the current case with hypothetical rule toggles, review dates, extracted date values, or document bundles. Simulations are preview-only and do not change case records, findings, audit history, or global rule settings.
 
 ---
 

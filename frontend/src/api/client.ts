@@ -105,6 +105,30 @@ export interface CaseEvidenceGraph {
   edges: EvidenceGraphEdge[];
 }
 
+export interface SimulationFinding {
+  rule_code: string;
+  title: string;
+  severity: string;
+  explanation: string;
+  evidence: Array<Record<string, unknown>>;
+}
+
+export interface SimulationResult {
+  review_date?: string | null;
+  included_document_count: number;
+  enabled_rule_codes: string[];
+  finding_count: number;
+  findings_by_severity: Record<string, number>;
+  findings: SimulationFinding[];
+}
+
+export interface ScenarioSimulation {
+  baseline: SimulationResult;
+  scenario: SimulationResult;
+  added_findings: SimulationFinding[];
+  resolved_findings: SimulationFinding[];
+}
+
 export interface AuditEvent {
   id: number;
   case_id: number;
@@ -214,6 +238,20 @@ export const api = {
 
   // Analysis & Findings
   analyzeCase: (caseId: number) => request<any>(`/cases/${caseId}/analyze`, { method: 'POST' }),
+  simulateCase: (
+    caseId: number,
+    payload: {
+      enabled_rule_codes: string[];
+      excluded_document_ids: number[];
+      review_date?: string;
+      field_overrides: Array<{ field_id: number; raw_value: string }>;
+    },
+  ) =>
+    request<ScenarioSimulation>(`/cases/${caseId}/simulate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }),
   reproduceRun: (runId: number) => request<any>(`/runs/${runId}/reproduce`, { method: 'POST' }),
   getFindings: (caseId: number) => request<Finding[]>(`/cases/${caseId}/findings`),
   reviewFinding: (findingId: number, decision: string, comment: string) =>

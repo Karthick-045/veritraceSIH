@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { api, DashboardSummary } from '../api/client';
 import { StatusBadge } from '../components/StatusBadge';
-import { ShieldCheck, FileText, AlertTriangle, Layers, Clock, ArrowRight, Play } from 'lucide-react';
+import { ShieldCheck, FileText, AlertTriangle, Layers, Clock, ArrowRight, Play, GitCompareArrows } from 'lucide-react';
 
 interface DashboardPageProps {
   onSelectCase: (caseId: number) => void;
   onNavigateToBenchmark: () => void;
+  onNavigateToSimulator: () => void;
 }
 
-export const DashboardPage: React.FC<DashboardPageProps> = ({ onSelectCase, onNavigateToBenchmark }) => {
+export const DashboardPage: React.FC<DashboardPageProps> = ({
+  onSelectCase,
+  onNavigateToBenchmark,
+  onNavigateToSimulator,
+}) => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,7 +65,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ onSelectCase, onNa
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={onNavigateToSimulator}
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold border border-white/20 transition"
+          >
+            What-if Simulator
+            <GitCompareArrows size={14} />
+          </button>
           <button
             onClick={() => onSelectCase(1)}
             className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white rounded-lg text-xs font-bold shadow transition"

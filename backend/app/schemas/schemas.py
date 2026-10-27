@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional, Any, Generic, TypeVar
 from pydantic import BaseModel, Field, EmailStr
 
@@ -214,6 +214,38 @@ class GraphEdge(BaseModel):
 class CaseEvidenceGraphOut(BaseModel):
     nodes: list[GraphNode]
     edges: list[GraphEdge]
+
+# What-if simulation
+class SimulationFieldOverride(BaseModel):
+    field_id: int
+    raw_value: str = Field(..., min_length=1, max_length=500)
+
+class ScenarioSimulationRequest(BaseModel):
+    enabled_rule_codes: Optional[list[str]] = Field(default=None, max_length=20)
+    excluded_document_ids: list[int] = Field(default_factory=list, max_length=100)
+    review_date: Optional[date] = None
+    field_overrides: list[SimulationFieldOverride] = Field(default_factory=list, max_length=100)
+
+class SimulationFindingOut(BaseModel):
+    rule_code: str
+    title: str
+    severity: str
+    explanation: str
+    evidence: list[dict[str, Any]]
+
+class SimulationResultOut(BaseModel):
+    review_date: Optional[date] = None
+    included_document_count: int
+    enabled_rule_codes: list[str]
+    finding_count: int
+    findings_by_severity: dict[str, int]
+    findings: list[SimulationFindingOut]
+
+class ScenarioSimulationOut(BaseModel):
+    baseline: SimulationResultOut
+    scenario: SimulationResultOut
+    added_findings: list[SimulationFindingOut]
+    resolved_findings: list[SimulationFindingOut]
 
 # Benchmarks
 class BenchmarkRunOut(BaseModel):

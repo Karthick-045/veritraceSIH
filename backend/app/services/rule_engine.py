@@ -7,10 +7,44 @@ from app.models.models import (
     ApplicationCase, Document, ExtractedField,
     ValidationRule, AnalysisRun, Finding, FindingEvidence, AuditEvent
 )
-from app.rules.base import Claim
+from app.rules.base import Claim, EvaluatedFinding
 from app.rules.registry import RULE_REGISTRY
 
 class RuleEngine:
+    @staticmethod
+    def build_claims(docs: list[Document], fields: list[ExtractedField]) -> list[Claim]:
+        doc_map = {d.id: d for d in docs}
+        claims: list[Claim] = []
+        for field in fields:
+            document = doc_map.get(field.document_id)
+            claims.append(Claim(
+                field_id=field.id,
+                doc_id=field.document_id,
+                doc_name=document.original_filename if document else f"Doc #{field.document_id}",
+                doc_type=document.doc_type if document else "unknown",
+                page_number=field.page_number,
+                key=field.field_key,
+                raw=field.raw_value,
+                normalized=field.normalized_value,
+                confidence=field.confidence,
+                bbox=field.bbox,
+                is_ambiguous=field.is_ambiguous
+            ))
+        return claims
+
+    @staticmethod
+    def evaluate_claims(
+        claims: list[Claim],
+        case_context: dict,
+        rule_codes: list[str] | set[str]
+    ) -> list[EvaluatedFinding]:
+        findings: list[EvaluatedFinding] = []
+        for rule_code in sorted(rule_codes):
+            rule_instance = RULE_REGISTRY.get(rule_code)
+            if rule_instance:
+                findings.extend(rule_instance.evaluate(claims, case_context))
+        return findings
+
     @staticmethod
     def compute_input_hash(docs: list[Document], fields: list[ExtractedField], rule_versions: dict[str, str]) -> str:
         tokens = []
@@ -31,7 +65,6 @@ class RuleEngine:
             raise ValueError(f"Case {case_id} not found")
 
         docs = db.query(Document).filter(Document.case_id == case_id).all()
-        doc_map = {d.id: d for d in docs}
         fields = db.query(ExtractedField).filter(ExtractedField.case_id == case_id).all()
 
         # Get active rules from DB or fallback to registry
@@ -70,25 +103,7 @@ class RuleEngine:
         db.commit()
         db.refresh(analysis_run)
 
-        # Build Claim objects
-        claims: list[Claim] = []
-        for f in fields:
-            d = doc_map.get(f.document_id)
-            d_name = d.original_filename if d else f"Doc #{f.document_id}"
-            d_type = d.doc_type if d else "unknown"
-            claims.append(Claim(
-                field_id=f.id,
-                doc_id=f.document_id,
-                doc_name=d_name,
-                doc_type=d_type,
-                page_number=f.page_number,
-                key=f.field_key,
-                raw=f.raw_value,
-                normalized=f.normalized_value,
-                confidence=f.confidence,
-                bbox=f.bbox,
-                is_ambiguous=f.is_ambiguous
-            ))
+        claims = RuleEngine.build_claims(docs, fields)
 
         case_context = {
             "case_id": case.id,
@@ -99,13 +114,8 @@ class RuleEngine:
 
         # Run each enabled rule
         all_findings = []
-        for rule_code in active_rule_codes.keys():
-            rule_instance = RULE_REGISTRY.get(rule_code)
-            if not rule_instance:
-                continue
-            rule_results = rule_instance.evaluate(claims, case_context)
-            for res in rule_results:
-                finding = Finding(
+        for res in RuleEngine.evaluate_claims(claims, case_context, active_rule_codes.keys()):
+            finding = Finding(
                     case_id=case_id,
                     analysis_run_id=analysis_run.id,
                     rule_code=res.rule_code,
@@ -117,26 +127,26 @@ class RuleEngine:
                     system_status="open",
                     reviewer_status="pending",
                     superseded=False
+            )
+            db.add(finding)
+            db.flush()
+
+            for ev in res.evidence:
+                f_evidence = FindingEvidence(
+                    finding_id=finding.id,
+                    source_label=ev.get("source_label", "evidence"),
+                    document_id=ev.get("document_id"),
+                    page_number=ev.get("page_number", 1),
+                    field_id=ev.get("field_id"),
+                    field_key=ev.get("field_key", ""),
+                    raw_value=ev.get("raw_value", ""),
+                    normalized_value=ev.get("normalized_value"),
+                    bbox=ev.get("bbox"),
+                    document_name=ev.get("document_name")
                 )
-                db.add(finding)
-                db.flush()
+                db.add(f_evidence)
 
-                for ev in res.evidence:
-                    f_evidence = FindingEvidence(
-                        finding_id=finding.id,
-                        source_label=ev.get("source_label", "evidence"),
-                        document_id=ev.get("document_id"),
-                        page_number=ev.get("page_number", 1),
-                        field_id=ev.get("field_id"),
-                        field_key=ev.get("field_key", ""),
-                        raw_value=ev.get("raw_value", ""),
-                        normalized_value=ev.get("normalized_value"),
-                        bbox=ev.get("bbox"),
-                        document_name=ev.get("document_name")
-                    )
-                    db.add(f_evidence)
-
-                all_findings.append(finding)
+            all_findings.append(finding)
 
         duration_ms = int((time.time() - start_time) * 1000)
         analysis_run.status = "completed"

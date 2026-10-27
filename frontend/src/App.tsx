@@ -4,6 +4,7 @@ import { CasesPage } from './pages/CasesPage';
 import { CaseWorkspacePage } from './pages/CaseWorkspacePage';
 import { BenchmarkLab } from './components/BenchmarkLab';
 import { RulesPage } from './pages/RulesPage';
+import { WhatIfSimulatorPage } from './pages/WhatIfSimulatorPage';
 import {
   ShieldCheck,
   LayoutDashboard,
@@ -12,10 +13,11 @@ import {
   Sliders,
   User,
   ExternalLink,
+  GitCompareArrows,
 } from 'lucide-react';
 
 export function App() {
-  const [currentNav, setCurrentNav] = useState<'dashboard' | 'cases' | 'workspace' | 'benchmarks' | 'rules'>('dashboard');
+  const [currentNav, setCurrentNav] = useState<'dashboard' | 'cases' | 'workspace' | 'benchmarks' | 'rules' | 'whatif'>('dashboard');
   const [selectedCaseId, setSelectedCaseId] = useState<number | null>(1);
   const [currentRole, setCurrentRole] = useState<'admin' | 'reviewer'>('reviewer');
 
@@ -99,6 +101,18 @@ export function App() {
                 <Sliders size={15} />
                 Rule Registry
               </button>
+
+              <button
+                onClick={() => setCurrentNav('whatif')}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition ${
+                  currentNav === 'whatif'
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                }`}
+              >
+                <GitCompareArrows size={15} />
+                What-if Simulator
+              </button>
             </nav>
 
             {/* User Role Switcher for Live Demo convenience */}
@@ -130,6 +144,7 @@ export function App() {
           <DashboardPage
             onSelectCase={handleSelectCase}
             onNavigateToBenchmark={() => setCurrentNav('benchmarks')}
+            onNavigateToSimulator={() => setCurrentNav('whatif')}
           />
         )}
 
@@ -147,6 +162,8 @@ export function App() {
         {currentNav === 'benchmarks' && <BenchmarkLab />}
 
         {currentNav === 'rules' && <RulesPage />}
+
+        {currentNav === 'whatif' && <WhatIfSimulatorPage />}
       </main>
 
       {/* Footer */}

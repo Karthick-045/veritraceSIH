@@ -27,6 +27,7 @@ from app.api.audit import router as audit_router
 from app.api.rules import router as rules_router
 from app.api.benchmarks import router as benchmarks_router
 from app.api.dashboard import router as dashboard_router
+from app.api.simulation import router as simulation_router
 
 # Initialize tables
 Base.metadata.create_all(bind=engine)
@@ -74,6 +75,7 @@ app.include_router(audit_router, prefix=settings.API_PREFIX)
 app.include_router(rules_router, prefix=settings.API_PREFIX)
 app.include_router(benchmarks_router, prefix=settings.API_PREFIX)
 app.include_router(dashboard_router, prefix=settings.API_PREFIX)
+app.include_router(simulation_router, prefix=settings.API_PREFIX)
 
 @app.on_event("startup")
 def startup_seed():
