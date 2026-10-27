@@ -84,6 +84,27 @@ export interface Finding {
   evidence_items: EvidenceItem[];
 }
 
+export interface EvidenceGraphNode {
+  id: string;
+  type: 'documentNode' | 'fieldNode' | 'findingNode';
+  label: string;
+  data: Record<string, unknown>;
+}
+
+export interface EvidenceGraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  label?: string | null;
+  animated?: boolean;
+  style?: Record<string, unknown> | null;
+}
+
+export interface CaseEvidenceGraph {
+  nodes: EvidenceGraphNode[];
+  edges: EvidenceGraphEdge[];
+}
+
 export interface AuditEvent {
   id: number;
   case_id: number;
@@ -212,7 +233,7 @@ export const api = {
     }),
 
   // Graph
-  getCaseGraph: (caseId: number) => request<{ nodes: any[]; edges: any[] }>(`/cases/${caseId}/graph`),
+  getCaseGraph: (caseId: number) => request<CaseEvidenceGraph>(`/cases/${caseId}/graph`),
 
   // Audit
   getCaseAudit: (caseId: number) => request<AuditEvent[]>(`/cases/${caseId}/audit`),
